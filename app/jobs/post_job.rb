@@ -4,14 +4,25 @@ class PostJob < ApplicationJob
 
   queue_as :default
 
-  rescue_from ActiveRecord::RecordNotFound do
-    retry_job wait: 1.second
+  rescue_from PostError do
+    Rails.logger.debug "0o0 " * 10
+    Rails.logger.debug "PostError"
+    Rails.logger.debug "0o0 " * 10
+    retry_job wait: 10.second
   end
+
+  # rescue_from XPostError do
+  #   Rails.logger.debug "Xx_ " * 10
+  #   Rails.logger.debug "XPostError"
+  #   Rails.logger.debug "Xx_ " * 10
+  #   retry_job wait: 10.second
+  # end
 
   def perform(*args)
     Rails.logger.debug "-=- " * 10
     Rails.logger.debug "STARTED " * 10
-    fail XPostError, 'test'
+    error = rand(10) > 5 ? PostError : XPostError
+    fail error, 'test'
     Rails.logger.debug "END " * 10
   end
 end
