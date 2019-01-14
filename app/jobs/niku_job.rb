@@ -4,6 +4,9 @@ class NikuJob < ApplicationJob
   def perform(*args)
     Rails.logger.debug "-|- " * 10
     Rails.logger.debug "#{self} STARTED " * 10
+    @skippable =true
+    return if @skippable
+
     ActiveRecord::Base.transaction do
       Rails.logger.debug "TX start"
       news = create_news
