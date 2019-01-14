@@ -8,6 +8,13 @@ class PostsController < ApplicationController
     @posts = Post.all
   end
 
+  def niku
+    NikuJob.perform_later
+
+    @posts = Post.all
+    render :index
+  end
+
   # GET /posts/1
   # GET /posts/1.json
   def show
