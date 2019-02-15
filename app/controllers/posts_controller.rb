@@ -5,6 +5,7 @@ class PostsController < ApplicationController
   # GET /posts.json
   def index
     PostJob.perform_later
+    CancelJob.perform_later
     @posts = Post.all
   end
 
